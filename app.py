@@ -8,7 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'mysecretkey'  # لتأمين النماذج
+app.config['SECRET_KEY'] = 'mysecretkey' 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:013555@localhost/cafeteria_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -16,13 +16,13 @@ db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 login_manager.login_view = 'login'
 
-# نموذج المستخدم
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password_hash = db.Column(db.String(120), nullable=False)
 
-# نموذج المنتج
+
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
@@ -30,7 +30,7 @@ class Product(db.Model):
     category = db.Column(db.String(50), nullable=False)
     image = db.Column(db.String(200), nullable=True)
 
-# نموذج الطلب
+
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -38,7 +38,7 @@ class Order(db.Model):
     status = db.Column(db.String(20), default='Pending')
     user = db.relationship('User', backref='orders')
 
-# نموذج عنصر الطلب
+
 class OrderItem(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'), nullable=False)
@@ -47,26 +47,26 @@ class OrderItem(db.Model):
     order = db.relationship('Order', backref='items')
     product = db.relationship('Product')
 
-# نموذج التسجيل
+
 class RegisterForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=3, max=80)])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
     submit = SubmitField('Register')
 
-# نموذج تسجيل الدخول
+
 class LoginForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
 
-# نموذج المنتج
+
 class ProductForm(FlaskForm):
     name = StringField('Name', validators=[DataRequired()])
     price = FloatField('Price', validators=[DataRequired(), NumberRange(min=0.01)])
     category = SelectField('Category', choices=[('Food', 'Food'), ('Drink', 'Drink')], validators=[DataRequired()])
     submit = SubmitField('Add Product')
 
-# نموذج الطلب
+
 class OrderForm(FlaskForm):
     product_id = SelectField('Product', coerce=int, validators=[DataRequired()])
     quantity = IntegerField('Quantity', validators=[DataRequired(), NumberRange(min=1)])
@@ -76,11 +76,11 @@ class OrderForm(FlaskForm):
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# إنشاء قاعدة البيانات وإضافة منتجات افتراضية
+
 with app.app_context():
     db.create_all()
     
-    # التحقق إذا كان فيه منتجات، لو مفيش نضيف افتراضيين
+
     if Product.query.count() == 0:
         products_data = [
             Product(name='American Breakfast', price=150, category='Food', image='https://images.unsplash.com/photo-1528137878665-60b3f4f5ce4b?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80'),
@@ -107,13 +107,13 @@ with app.app_context():
         db.session.commit()
         flash('Default products added!')
 
-# الصفحة الرئيسية
+
 @app.route('/')
 def index():
     products = Product.query.all()
     return render_template('index.html', products=products)
 
-# التسجيل
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     form = RegisterForm()
@@ -126,7 +126,6 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
 
-# تسجيل الدخول
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -138,21 +137,21 @@ def login():
         flash('Invalid username or password.')
     return render_template('login.html', form=form)
 
-# تسجيل الخروج
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
 
-# لوحة التحكم
+
 @app.route('/dashboard')
 @login_required
 def dashboard():
     orders = Order.query.filter_by(user_id=current_user.id).all()
     return render_template('dashboard.html', orders=orders)
 
-# إضافة منتج (للأدمن)
+
 @app.route('/admin/add_product', methods=['GET', 'POST'])
 @login_required
 def add_product():
@@ -165,14 +164,14 @@ def add_product():
         return redirect(url_for('index'))
     return render_template('add_product.html', form=form)
 
-# عرض الطلبات (للأدمن)
+
 @app.route('/admin/orders')
 @login_required
 def admin_orders():
     orders = Order.query.all()
     return render_template('admin_orders.html', orders=orders)
 
-# تحديث حالة الطلب
+
 @app.route('/admin/update_order/<int:order_id>', methods=['POST'])
 @login_required
 def update_order(order_id):
@@ -182,7 +181,7 @@ def update_order(order_id):
     flash('Order updated!')
     return redirect(url_for('admin_orders'))
 
-# تقديم طلب
+
 @app.route('/order', methods=['GET', 'POST'])
 @login_required
 def order():
@@ -201,7 +200,7 @@ def order():
         return redirect(url_for('dashboard'))
     return render_template('order.html', form=form)
 
-# البحث عن المنتجات
+
 @app.route('/search', methods=['GET', 'POST'])
 def search():
     query = request.form.get('query') if request.method == 'POST' else ''
