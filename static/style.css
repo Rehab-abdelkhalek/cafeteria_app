@@ -5,7 +5,7 @@ body {
     color: #333;
 }
 
-/* خلفيات الصفحات */
+
 body.index-background {
     background-image: url('/static/fries.jpg');
     background-size: cover;
@@ -32,7 +32,7 @@ body.order-background {
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    background-attachment: fixed; /* زيادة لضمان الظهور */
+    background-attachment: fixed; 
 }
 
 body.dashboard-background {
@@ -64,7 +64,7 @@ body.admin_orders-background {
 }
 
 nav {
-    background-color: #6f4e37; /* لون كافيه */
+    background-color: #6f4e37; 
     padding: 15px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
