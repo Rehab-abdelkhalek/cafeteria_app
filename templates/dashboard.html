@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block body_class %}dashboard-background{% endblock %}
+{% block content %}
+<h1>Dashboard</h1>
+<h2>Your Orders</h2>
+<div class="products-grid">
+    {% for order in orders %}
+    <div class="product-card">
+        <div class="product-name">Order #{{ order.id }} - Total: ${{ order.total_price }} - Status: {{ order.status }}</div>
+        <ul style="list-style: disc; padding-left: 20px;">
+            {% for item in order.items %}
+            <li>{{ item.product.name }} (x{{ item.quantity }})</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

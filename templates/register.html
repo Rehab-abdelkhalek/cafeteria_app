@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block body_class %}register-background{% endblock %}
+{% block content %}
+<div class="form-container">
+    <div class="form-box">
+        <h1>Register</h1>
+        <form method="POST" style="text-align: center;">
+            {{ form.hidden_tag() }}
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label>{{ form.username.label }}</label>
+                {{ form.username(class="form-control", style="width: 80%; margin: 0 auto;") }}
+            </div>
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label>{{ form.password.label }}</label>
+                {{ form.password(class="form-control", style="width: 80%; margin: 0 auto;") }}
+            </div>
+            <div class="form-group">
+                {{ form.submit(class="btn-submit") }}
+            </div>
+        </form>
+        {% for message in get_flashed_messages() %}
+            <div class="flash-messages">{{ message }}</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
