@@ -1,0 +1,24 @@
+
+{% extends 'base.html' %}
+{% block body_class %}add_product-background{% endblock %}
+{% block content %}
+<h1>Add New Product</h1>
+<form method="POST" class="order-form">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        <label>{{ form.name.label }}</label>
+        {{ form.name(class="form-control") }}
+    </div>
+    <div class="form-group">
+        <label>{{ form.price.label }}</label>
+        {{ form.price(class="form-control") }}
+    </div>
+    <div class="form-group">
+        <label>{{ form.category.label }}</label>
+        {{ form.category(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.submit(class="btn-submit") }}
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block body_class %}admin_orders-background{% endblock %}
+{% block content %}
+<h1>Manage Orders</h1>
+<div class="products-grid">
+    {% for order in orders %}
+    <div class="product-card">
+        <div class="product-name">Order #{{ order.id }}</div>
+        <div class="product-price">Total: ${{ order.total_price }}</div>
+        <div class="product-category">Status: {{ order.status }}</div>
+        <ul style="list-style: disc; padding-left: 20px; text-align: left;">
+            {% for item in order.items %}
+            <li>{{ item.product.name }} (x{{ item.quantity }})</li>
+            {% endfor %}
+        </ul>
+        <form method="POST" action="{{ url_for('update_order', order_id=order.id) }}">
+            <button type="submit" class="btn-submit">Mark as Completed</button>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

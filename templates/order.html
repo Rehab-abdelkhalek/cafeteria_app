@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block body_class %}order-background{% endblock %}
+{% block content %}
+<h1>Place Order</h1>
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+<form method="POST" class="order-form">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        <label>{{ form.product_id.label }}</label>
+        {{ form.product_id(class="form-control") }}
+    </div>
+    <div class="form-group">
+        <label>{{ form.quantity.label }}</label>
+        {{ form.quantity(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.submit(class="btn-submit") }}
+    </div>
+</form>
+{% endblock %}
